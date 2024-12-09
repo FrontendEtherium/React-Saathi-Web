@@ -1,0 +1,1 @@
+export const imagePath ='https://saathi.etheriumtech.com:444/'

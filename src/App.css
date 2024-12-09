@@ -1,0 +1,488 @@
+@charset "utf-8";
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
+  /* padding: 0;
+  margin: 0;
+  text-align: left; */
+@import url("https://fonts.googleapis.com/css2?family=Dosis&family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans&display=swap");
+* {
+  font-family: "Raleway", sans-serif;
+}
+body {
+  font-weight: 400;
+  font-size: 12px;
+  position: relative;
+  color: #444;
+  
+}
+
+/* .navbar{
+  border-bottom-style:solid;
+  border-color:rgb(227, 229, 236);
+  border-width:1px;
+  display:block !important;
+} */
+.leftNav{
+  border-right-style:solid;
+  border-color:rgb(227, 229, 236);
+  border-width:1px;
+  border-bottom:0px;
+  min-height:100vh;
+
+ 
+
+}
+
+.topbar{
+  background: linear-gradient(to right, #0178bc 0%, #00bdda 100%)
+}
+
+.navbar .leftbar{
+  border-right-style:solid;
+  border-color:rgb(227, 229, 236);
+  border-width:1px;
+  border-bottom:0px !important
+  
+}
+
+@media (min-width: 992px) {
+  .leftbar{
+    height:100vh;
+    /* background-color: darkslateblue; */
+    /* width:17%; */
+    width:16%
+    
+  }
+  
+}
+
+@media (min-width: 989px) and (max-width: 1189px) {
+  .navbar-nav .nav-link {
+    padding: 10px 20px;  /* Adjust padding */
+    font-size: 9px!important;    
+    font-weight: 500;    /* Adjust font weight */
+    text-align: left;
+    padding-left: 0 !important;
+    /* color: #ffffff;    */
+    margin: 5px 0;       /* Margin between links */
+    /* border-radius: 4px;  */
+     /* Rounded corners */
+    /* transition: background-color 0.3s ease;  */
+     /* Smooth hover effect */
+  }
+  .accordion-button{
+    font-size: 9px!important;
+    text-align: left !important;
+    padding-left: 3px !important;
+    font-family: "Raleway", sans-serif;
+    color: #444 !important
+    
+  }
+ 
+}
+
+@media (max-width: 992px) {
+  .leftbar {
+   
+   
+  }
+}
+.content{
+  background-color:whitesmoke;
+  min-height:100vh;
+}
+
+ 
+
+
+ @media (max-width: 992px) {
+  .brandMobile {
+   display:none;
+  }
+}
+
+.brandMobile {
+  font-size: 24px !important;
+    font-weight: bold;
+    color: #54667a !important;
+    padding: 10px !important;
+    margin-top: 2px !important;
+    border-bottom: solid 1px;
+    border-bottom-color: whitesmoke;
+    width: 100%;
+    text-align: center;
+  
+}
+
+
+.navbar-nav .nav-link {
+  padding: 10px 20px;  /* Adjust padding */
+  font-size: 12px;     /* Adjust font size */
+  font-weight: 500;    /* Adjust font weight */
+  text-align: left;
+  padding-left: 0 !important;
+  /* color: #ffffff;    */
+  /* margin: 5px 0;    */
+      /* Margin between links */
+  /* border-radius: 4px;  */
+   /* Rounded corners */
+  /* transition: background-color 0.3s ease;  */
+   /* Smooth hover effect */
+}
+
+/* Hover effect for Navbar Links */
+.navbar-nav .nav-link:hover {
+  /* background-color: rgba(255, 255, 255, 0.1); */
+   /* Lighten on hover */
+  color:#009efb; /* Maintain text color */
+  text-decoration: none; /* Remove underline */
+  border-left: 4px solid #009efb;
+  
+}
+
+/* Active link styling */
+.navbar-nav .nav-link.active {
+  background-color: #cfe2ff; /* Active link background */
+
+  color: #ffffff; /* Active link text color */
+  border-left: 4px solid #009efb;
+  
+}
+
+.active-nav-link {
+  background-color: #f0f0fe;
+  color: #009efb !important;
+  /* border-left: 4px solid #009efb !important */
+}
+
+
+.leftNavbar.navbar-nav {
+  padding-left: 0; /* Remove padding */
+}
+
+.leftNavbar .nav-link {
+  text-align: left !important; /* Left-align text */
+  padding-left: 0; /* Remove padding for alignment */
+  margin-left: 0; /* Remove any left margin */
+  
+}
+/* Mobile-specific adjustments */
+@media (max-width: 767px) {
+  .navbar-nav .nav-link {
+    text-align: center;  /* Center align text on mobile */
+    padding: 15px 0;     /* Increase padding on mobile */
+  }
+}
+
+
+/* header css */
+/* 
+.header{
+  
+  border-bottom: 1px solid gainsboro;
+  background-color: darkslateblue;
+ 
+} */
+
+.footer{
+  background-color:darkslateblue;
+  color: white;
+}
+
+.footerTitle{
+  margin-top:1rem;
+}
+
+
+.slider-heading p {
+  padding: 15px 19px;
+  color: #fff;
+  font-size: 20px;
+  text-transform: capitalize;
+}
+.bg-pink {
+  background: #f5b6ff;
+}
+.bg-org {
+  background: #ffc672;
+}
+.bg-l-org {
+  background: #ffa68a;
+}
+.bg-voilet {
+  background: #cca4ff;
+}
+.bg-blue {
+  background: #71ddff;
+}
+.bg-green {
+  background: #8bffba;
+}
+
+
+
+.banner {
+  height: 49vh;
+  position: relative;
+  background: url("https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-300,f-webp/assets/img/Banner1-Full.jpg") center;
+  animation: carousel 30s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+
+.primary-btn-color {
+  background-color: #00415e;
+}
+
+@keyframes carousel {
+  0% {
+    background: url("https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-1000,f-webp/assets/img/Banner1-Full.jpg")
+      center center no-repeat;
+    background-size: cover;
+  }
+  25% {
+    background: url("https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-1000,f-webp/assets/img/Banner2.jpg") center
+      center no-repeat;
+    background-size: cover;
+  }
+  50% {
+    background: url("https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-1000,f-webp/assets/img/Banner3.jpg") center
+      center no-repeat;
+    background-size: cover;
+  }
+  100% {
+    background: url("https://ik.imagekit.io/hg4fpytvry/product-images/tr:w-1000,f-webp/assets/img/Banner41.jpg") center
+      center no-repeat;
+    background-size: cover;
+  }
+}
+.banner .banner-title {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  flex-direction: column;
+  font-weight: bold;
+  opacity: 1;
+  text-shadow: 2px 5px 5px black;
+}
+
+.banner .banner-title h1 {
+  font-weight: bold;
+}
+
+
+
+.header {
+  display: flex;
+  /*justify-content: space-between;*/
+  padding: 15px 0;
+}
+.pageHeader {
+  height: 200px;
+}
+.comman-pg-header {
+  background: #b9daf1;
+}
+.modal-header {
+  padding: 0;
+  border: 0;
+}
+.logo img {
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  @media only screen and (min-width: 320px) and (max-width: 480px){
+    
+  }
+
+}
+.logo{
+/*     flex-grow:1; */
+}
+
+@media only screen and (min-width: 767px)  {
+    .webAlign{
+       margin-left:40px;
+       margin-right:70px;
+    }
+  
+}
+.fgrow{
+  flex-grow:2;
+    justify-content:center !important;
+  display:flex !important;
+
+}
+.logo span {
+  color: #00415e;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.navbar-nav .nav-link{
+  padding-left:1rem;
+  padding-right:.5rem;
+}
+
+.bg-light {
+  background-color: transparent !important;
+}
+
+.nav-link-black {
+  color: black !important;
+  font-size: 20px !important;
+}
+
+/* .card{
+  border-radius: 0!important;
+} */
+@media (min-width: 768px) { /* Adjust the breakpoint as needed */
+  .navbar .leftside {
+    position: fixed !important;
+    top: 0;
+    width:16% !important;
+  }
+}
+
+.signup{
+  margin-top:2.5rem;
+}
+
+img{
+ width:80%
+}
+
+.signup .row {
+  --bs-gutter-x: 0rem !important;
+}
+
+.date-input-with-label {
+  position: relative;
+  padding-left: 65px; /* Adjust this padding to accommodate the label and the space */
+}
+
+.date-input-with-label::before {
+  content: "D.O.B";  /* The text you want inside the input field */
+  position: absolute;
+  left: 10px;  /* Adjust this value to position the label correctly */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;  /* Customize color to fit with the input */
+  font-size: 12px;  /* Adjust the font size as needed */
+  pointer-events: none;  /* Ensure that the label doesn't interfere with clicking in the input */
+  margin-right: 5px; /* Add some space after the label */
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+  border-color: inherit; /* Revert border color to the default */
+  padding-right: calc(1.5em + 0.75rem); /* Adjust padding */
+  background-image: none; /* Remove the green checkmark */
+}
+.label-style{
+  font-size: 14px;
+  color:rgb(159, 152, 152)
+}
+.edit-btn-color{
+  color:rgb(130, 121, 121)
+}
+.delete-btn-color{
+  color:rgb(241, 15, 15)
+}
+
+.accordion-button{
+  font-size: 12px!important;
+  text-align: left !important;
+  padding-left: 3px !important;
+  font-family: "Raleway", sans-serif;
+  color: #444 !important
+  
+}
+
+@media (min-width: 989px) and (max-width: 1189px) {
+  
+  .leftbar{
+    height:100vh;
+    /* background-color: darkslateblue; */
+    width:16% !important;
+    
+  }
+ 
+}
+
+
+.logout{
+  padding: '6px 12px';
+  border-radius: '4px'; 
+  cursor: 'pointer' ;
+  font-size: 12px;
+
+}
+
+h4 {
+  color:#009efb !important;
+  
+}
+.table-info {
+  --bs-table-bg: #c1d6e2!important; /* Custom background color */
+}
+
+.table-font-size{
+  font-size:14px;
+}
+
+.accordion-button::after {
+  content: none !important; /* Removes the default accordion icon */
+}
+
+.accordion-button{
+  padding:0 !important;
+}
+
+.profile-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;    /* Ensures the image covers the entire area */
+  border-radius: 50%;   /* Makes the image circular */
+  border: 2px solid #ccc; /* Optional border */
+}
+
+
+.leftside {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Full height */
+  overflow-y: auto; /* Enable scrolling */
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.leftside::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+}
+
+/* Optional for other browsers: */
+.leftside {
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+}
+
+.font-18{
+  font-size:18px;
+}
+.font-16{
+  font-size:16px;
+}
+.font-20{
+  font-size:20px;
+}
+.font-14{
+  font-size:14px;
+}
+
+.appColor{
+  color:#009efb;
+}
+
+.dropdown-toggle::after{
+content:none !important
+}

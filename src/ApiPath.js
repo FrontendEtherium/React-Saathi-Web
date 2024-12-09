@@ -1,0 +1,1 @@
+export const baseUrl ='https://saathi.etheriumtech.com:444/Saathi'

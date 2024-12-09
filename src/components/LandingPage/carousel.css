@@ -1,0 +1,148 @@
+.plan-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    margin: 20px 10px;
+    position: relative;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+}
+
+.plan-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.plan-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff5733;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 25px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.plan-badge.gold {
+    background-color: black; /* Gold color */
+}
+
+.plan-badge.platinum {
+    background-color: rosybrown; /* Platinum color */
+}
+
+.plan-badge.companion {
+    background-color: silver; /* Companion color */
+}
+
+.plan-badge.bronze {
+    background-color: #cd7f32; /* Bronze color */
+}
+
+.price {
+    font-size: 30px;
+    color: green;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+
+.price span {
+    font-size: 14px;
+    color: #777;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    text-align: left; /* Align text to the left */
+    margin-top: 20px;
+}
+
+.features li {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.request-callback {
+    background-color: #ff5733;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.request-callback:hover {
+    background-color: #c13b22;
+}
+
+.owl-theme .owl-nav [class*='owl-'] {
+    color: #FFF;
+    font-size: 22px;
+    margin: 0;
+    padding: 4px 7px;
+    background: #d4af37;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.owl-theme .owl-nav [class*='owl-']:hover {
+    background: #ff5733;
+}
+
+.tabslider .comman-heading {
+    margin-bottom: 2rem;
+  }
+  
+  .tabslider .step {
+    text-align: center;
+  }
+  
+  .tabslider .step h5 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tabslider .step p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tabslider .step-image {
+    width: 150px;  /* Set a fixed width */
+    height: auto;  /* Maintain aspect ratio */
+    margin-top: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .tabslider .step-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  @font-face {
+    font-family: 'Dream_Orphans';
+    src: url('../../assets/fonts/Dream_Orphans_Bd.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
