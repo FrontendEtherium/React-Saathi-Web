@@ -26,9 +26,7 @@ function AllServices() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await axios.get(
-          `${baseUrl}/alacarteservices/active`
-        );
+        const response = await axios.get(`${baseUrl}/alacarteservices/active`);
         setServices(response.data);
       } catch (err) {
         console.error("Error fetching services:", err);
@@ -165,7 +163,7 @@ function AllServices() {
                     </th>
                     <th className="text-center align-middle">Business Hours</th>
                     {user === "Admin" && (
-                    <th className="text-center align-middle">Edit/Delete</th>
+                      <th className="text-center align-middle">Edit/Delete</th>
                     )}
                   </tr>
                 </thead>
@@ -190,29 +188,32 @@ function AllServices() {
                         {service.businessHoursStart} -{" "}
                         {service.businessHoursEnd}
                       </td>
-              
-                      {user === "Admin" && (
-                      <td>
-                        <span className="text-decoration-none me-3">
-                          <Link
-                            to={`/dashboard/UpdateService/${service.serviceID}`}
-                            style={{ color: "inherit", textDecoration: "none" }}
-                          >
-                            <i
-                              className="bi bi-pencil-fill edit-btn-color"
-                              onClick={() => handleEditClick(service)}
-                            ></i>
-                          </Link>
-                        </span>
 
-                        <span>
-                          <i
-                            className="bi bi-trash3-fill delete-btn-color"
-                            onClick={() => handleDelete(service.serviceID)}
-                            style={{ cursor: "pointer" }}
-                          ></i>
-                        </span>
-                      </td>
+                      {user === "Admin" && (
+                        <td>
+                          <span className="text-decoration-none me-3">
+                            <Link
+                              to={`/dashboard/UpdateService/${service.serviceID}`}
+                              style={{
+                                color: "inherit",
+                                textDecoration: "none",
+                              }}
+                            >
+                              <i
+                                className="bi bi-pencil-fill edit-btn-color"
+                                onClick={() => handleEditClick(service)}
+                              ></i>
+                            </Link>
+                          </span>
+
+                          <span>
+                            <i
+                              className="bi bi-trash3-fill delete-btn-color"
+                              onClick={() => handleDelete(service.serviceID)}
+                              style={{ cursor: "pointer" }}
+                            ></i>
+                          </span>
+                        </td>
                       )}
                     </tr>
                   ))}

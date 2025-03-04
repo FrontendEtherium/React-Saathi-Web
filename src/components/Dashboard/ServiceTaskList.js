@@ -8,11 +8,10 @@ import {
   Modal,
   Form,
   Table,
-
 } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { baseUrl } from "../../ApiPath";
-import StarIcon from '@mui/icons-material/Star';
+import StarIcon from "@mui/icons-material/Star";
 import { Box } from "@mui/material";
 function ServiceTaskList() {
   const [subscriber, setSubscriber] = useState(null);
@@ -25,7 +24,7 @@ function ServiceTaskList() {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [completedRequest, setCompletedRequest] = useState([]);
   const [pendingRequest, setPendingRequest] = useState([]);
-  const [selectedServiceName, setSelectedServiceName] = useState(""); 
+  const [selectedServiceName, setSelectedServiceName] = useState("");
   const userId = localStorage.getItem("userId");
   const { id } = useParams();
 
@@ -53,30 +52,30 @@ function ServiceTaskList() {
   }, []);
 
   // Fetch selected subscriber's details and patrons
- // Fetch selected subscriber's details and patrons
-const fetchSubscriberDetails = async () => {
-  try {
-    const response = await fetch(`${baseUrl}/subscribers/${subId}`);
-    const json = await response.json();
-    setPackageDetail(json);
+  // Fetch selected subscriber's details and patrons
+  const fetchSubscriberDetails = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/subscribers/${subId}`);
+      const json = await response.json();
+      setPackageDetail(json);
 
-    if (!json.patrons || json.patrons.length === 0) {
-      setPatron("");
-      // If no patrons, show the modal to prompt adding a patron
-      setShowAddPatronModal(true);
-    } else {
-      setPatron(json.patrons); // Patrons are set here
-      setShowAddPatronModal(false); // Hide the modal if patrons are found
+      if (!json.patrons || json.patrons.length === 0) {
+        setPatron("");
+        // If no patrons, show the modal to prompt adding a patron
+        setShowAddPatronModal(true);
+      } else {
+        setPatron(json.patrons); // Patrons are set here
+        setShowAddPatronModal(false); // Hide the modal if patrons are found
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-const [showAddPatronModal, setShowAddPatronModal] = useState(false);
-const handleRedirectToPatronScreen = () => {
-  // Redirect to the patron screen, assuming the patron screen route is '/patrons'
-  window.location.href = "/dashboard/patronDetails";
-};
+  };
+  const [showAddPatronModal, setShowAddPatronModal] = useState(false);
+  const handleRedirectToPatronScreen = () => {
+    // Redirect to the patron screen, assuming the patron screen route is '/patrons'
+    window.location.href = "/dashboard/patronDetails";
+  };
   useEffect(() => {
     if (subId !== 0) {
       fetchSubscriberDetails();
@@ -110,7 +109,7 @@ const handleRedirectToPatronScreen = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [completionData, setCompletionData] = useState({
     notes: "",
-    screenshot: null,
+    screenshots: [], // Changed to an array to hold multiple files
     preferredDate: "",
     preferredTime: "",
   });
@@ -119,7 +118,7 @@ const handleRedirectToPatronScreen = () => {
   const handleShowModal = (task, preferredDateTime) => {
     setSelectedRequest(task);
     setServiceNameSelected(task.serviceName);
-    
+
     setCompletionData({
       ...completionData,
       preferredDate: preferredDateTime.preferredDate || "",
@@ -127,30 +126,36 @@ const handleRedirectToPatronScreen = () => {
     });
     setShowModal(true);
   };
-  
+
   const totalPackagePending = requests
-  ?.filter((task) => !task.alaCarte)
-  .reduce((sum, task) => sum + task.pending, 0);
+    ?.filter((task) => !task.alaCarte)
+    .reduce((sum, task) => sum + task.pending, 0);
 
-const totalPackageCompleted = requests
-  ?.filter((task) => !task.alaCarte)
-  .reduce((sum, task) => sum + task.completions, 0);
+  const totalPackageCompleted = requests
+    ?.filter((task) => !task.alaCarte)
+    .reduce((sum, task) => sum + task.completions, 0);
 
-const totalAlaCartePending = requests
-  ?.filter((task) => task.alaCarte)
-  .reduce((sum, task) => sum + task.pending, 0);
+  const totalAlaCartePending = requests
+    ?.filter((task) => task.alaCarte)
+    .reduce((sum, task) => sum + task.pending, 0);
 
-const totalAlaCarteCompleted = requests
-  ?.filter((task) => task.alaCarte)
-  .reduce((sum, task) => sum + task.completions, 0);
+  const totalAlaCarteCompleted = requests
+    ?.filter((task) => task.alaCarte)
+    .reduce((sum, task) => sum + task.completions, 0);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setCompletionData({
-      ...completionData,
-
-      [name]: files ? files[0] : value,
-    });
+    if (name === "screenshots") {
+      setCompletionData({
+        ...completionData,
+        [name]: Array.from(files), // Convert FileList to an array
+      });
+    } else {
+      setCompletionData({
+        ...completionData,
+        [name]: value,
+      });
+    }
   };
   // Filtered services based on selected service name
   useEffect(() => {
@@ -159,18 +164,20 @@ const totalAlaCarteCompleted = requests
       return request.serviceName === selectedServiceName;
     });
     setFilteredRequests(filtered); // Update the filtered requests
-  }, [selectedServiceName, requests]); 
- 
+  }, [selectedServiceName, requests]);
+
   // Handle form submission and refresh data
   const handleSubmit = async () => {
     if (!selectedRequest) return;
 
     const formData = new FormData();
     formData.append("description", completionData.notes);
-    formData.append("frequencyInstance",selectedRequest.frequencyInstance)
-    if (completionData.screenshot) {
-      formData.append("file", completionData.screenshot);
-    }
+    formData.append("frequencyInstance", selectedRequest.frequencyInstance);
+
+    // Append each file to the FormData object
+    completionData.screenshots.forEach((file, index) => {
+      formData.append(`file_${index}`, file); // Add each file with a unique key
+    });
 
     if (selectedRequest.alaCarte) {
       formData.append("isAlaCarte", true);
@@ -180,13 +187,11 @@ const totalAlaCarteCompleted = requests
       );
     } else {
       formData.append("isAlaCarte", false);
-      if(selectedRequest.preferredDatesTimes.length !== 0){
+      if (selectedRequest.preferredDatesTimes.length !== 0) {
         formData.append("preferredDate", completionData.preferredDate);
         formData.append("preferredTime", completionData.preferredTime);
       }
-     
     }
-    console.log("formData", formData);
 
     try {
       const response = await fetch(
@@ -207,7 +212,6 @@ const totalAlaCarteCompleted = requests
       setAlert(`Error updating task for ${selectedRequest.serviceName}`);
     }
 
-    setTimeout(() => setAlert(""), 3000);
     handleCloseModal();
   };
 
@@ -226,44 +230,48 @@ const totalAlaCarteCompleted = requests
     0
   );
   const handleServiceNameChange = (e) => {
-    console.log("value from service change",e.target.value);
-    
+    console.log("value from service change", e.target.value);
+
     setSelectedServiceName(e.target.value); // Set selected service name
   };
 
   return (
     <div className="d-flex">
       <Container className="justify-content-center align-items-center mt-5 px-5">
-      <Modal show={showAddPatronModal} onHide={() => { setShowAddPatronModal(false); setSubId(0); }}>
-
-        <Modal.Header closeButton>
-          <Modal.Title style={{ fontSize: "18px", color: "#ff0000" }}>
-            No Patrons Found
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p style={{ fontSize: "14px" }}>
-            No patrons are associated with this subscriber. Please add a patron first.
-          </p>
-        </Modal.Body>
-        <Modal.Footer style={{alignItems:'center',justifyContent:'center'}}>
-          <Link
-          to={`/dashboard/patronDetails/${subId}`}
-          style={{
-            color: "inherit",
-            textDecoration: "none",
-          }}>
-          <Button
-            variant="primary"
-          
-            style={{ fontSize: "14px" }}
+        <Modal
+          show={showAddPatronModal}
+          onHide={() => {
+            setShowAddPatronModal(false);
+            setSubId(0);
+          }}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ fontSize: "18px", color: "#ff0000" }}>
+              No Patrons Found
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p style={{ fontSize: "14px" }}>
+              No patrons are associated with this subscriber. Please add a
+              patron first.
+            </p>
+          </Modal.Body>
+          <Modal.Footer
+            style={{ alignItems: "center", justifyContent: "center" }}
           >
-            Add Patron
-          </Button>
-          </Link>
-         
-        </Modal.Footer>
-      </Modal>
+            <Link
+              to={`/dashboard/patronDetails/${subId}`}
+              style={{
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              <Button variant="primary" style={{ fontSize: "14px" }}>
+                Add Patron
+              </Button>
+            </Link>
+          </Modal.Footer>
+        </Modal>
         <Card className="shadow-sm pb-3">
           <Card.Body>
             <div className="d-flex justify-content-center">
@@ -350,10 +358,8 @@ const totalAlaCarteCompleted = requests
                                   key={index}
                                   style={{ marginBottom: "10px" }}
                                 >
-                                 {service.serviceName}
-                                  
-                             
-                                </li> 
+                                  {service.serviceName}
+                                </li>
                               )
                             )}
                           </ul>
@@ -364,157 +370,233 @@ const totalAlaCarteCompleted = requests
 
                   {/* Service Requests Summary */}
                   <Col md={4} className="d-flex">
-    <Card className="shadow-sm flex-fill">
-      <Card.Body>
-        <Card.Title style={{ fontSize: "16px", fontWeight: "bold" }}>
-          Service Requests Summary
-        </Card.Title>
-        <hr />
-        <Card.Text>
-          <h6 style={{fontSize:'14px'}}>Package Services</h6>
-          <div className="d-flex justify-content-between">
-            <div>
-              <p style={{ fontSize: "14px", fontWeight: "bold", color: "green" }}>
-                Completed:
-                <span style={{ fontSize: "24px", marginLeft: "10px" }}>
-                  {totalPackageCompleted}
-                </span>
-              </p>
-            </div>
-            <div>
-              <p style={{ fontSize: "14px", fontWeight: "bold", color: "red" }}>
-                Pending:
-                <span style={{ fontSize: "24px", marginLeft: "10px" }}>
-                  {totalPackagePending}
-                </span>
-              </p>
-            </div>
-          </div>
+                    <Card className="shadow-sm flex-fill">
+                      <Card.Body>
+                        <Card.Title
+                          style={{ fontSize: "16px", fontWeight: "bold" }}
+                        >
+                          Service Requests Summary
+                        </Card.Title>
+                        <hr />
+                        <Card.Text>
+                          <h6 style={{ fontSize: "14px" }}>Package Services</h6>
+                          <div className="d-flex justify-content-between">
+                            <div>
+                              <p
+                                style={{
+                                  fontSize: "14px",
+                                  fontWeight: "bold",
+                                  color: "green",
+                                }}
+                              >
+                                Completed:
+                                <span
+                                  style={{
+                                    fontSize: "24px",
+                                    marginLeft: "10px",
+                                  }}
+                                >
+                                  {totalPackageCompleted}
+                                </span>
+                              </p>
+                            </div>
+                            <div>
+                              <p
+                                style={{
+                                  fontSize: "14px",
+                                  fontWeight: "bold",
+                                  color: "red",
+                                }}
+                              >
+                                Pending:
+                                <span
+                                  style={{
+                                    fontSize: "24px",
+                                    marginLeft: "10px",
+                                  }}
+                                >
+                                  {totalPackagePending}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
 
-          <h6 className="mt-4">Ala-Carte Services</h6>
-          <div className="d-flex justify-content-between">
-            <div>
-              <p style={{ fontSize: "14px", fontWeight: "bold", color: "green" }}>
-                Completed:
-                <span style={{ fontSize: "24px", marginLeft: "10px" }}>
-                  {totalAlaCarteCompleted}
-                </span>
-              </p>
-            </div>
-            <div>
-              <p style={{ fontSize: "14px", fontWeight: "bold", color: "red" }}>
-                Pending:
-                <span style={{ fontSize: "24px", marginLeft: "10px" }}>
-                  {totalAlaCartePending}
-                </span>
-              </p>
-            </div>
-          </div>
-        </Card.Text>
-      </Card.Body>
-    </Card>
-  </Col>
+                          <h6 className="mt-4">Ala-Carte Services</h6>
+                          <div className="d-flex justify-content-between">
+                            <div>
+                              <p
+                                style={{
+                                  fontSize: "14px",
+                                  fontWeight: "bold",
+                                  color: "green",
+                                }}
+                              >
+                                Completed:
+                                <span
+                                  style={{
+                                    fontSize: "24px",
+                                    marginLeft: "10px",
+                                  }}
+                                >
+                                  {totalAlaCarteCompleted}
+                                </span>
+                              </p>
+                            </div>
+                            <div>
+                              <p
+                                style={{
+                                  fontSize: "14px",
+                                  fontWeight: "bold",
+                                  color: "red",
+                                }}
+                              >
+                                Pending:
+                                <span
+                                  style={{
+                                    fontSize: "24px",
+                                    marginLeft: "10px",
+                                  }}
+                                >
+                                  {totalAlaCartePending}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
                 </Row>
 
                 {/* Task Tables */}
                 {/* Task Tables */}
-{/* Task Tables */}
+                {/* Task Tables */}
 
-<Row className="mt-5">
-  <Col>
-    <h5
-      style={{
-        fontSize: "16px",
-        color: "#009efb",
-        textAlign: "center",
-      }}
-    >
-      Package Services
-    </h5>
-    <Table striped bordered hover responsive>
-      <thead>
-        <tr className="table-info">
-          <th><Col >
-                {/* <Form.Label style={{ fontSize: "14px" }}>Select Service Name</Form.Label> */}
-                <Form.Select
-                  aria-label="Select Service Name"
-                  value={selectedServiceName}
-                  style={{ fontSize: "14px" ,fontWeight:'bold'}}
-                  onChange={handleServiceNameChange}
-                >
-                  <option value="" style={{fontSize:'14px'}}> Service Name</option>
-                  {[...new Set(requests?.map((req) => req.serviceName))].map(
-                    (serviceName, index) => (
-                      <option key={index} value={serviceName}>
-                        {serviceName}
-                      </option>
-                    )
-                  )}
-                </Form.Select>
-              </Col></th>
-          <th style={{alignItems:'center',alignSelf:'center',marginBottom:'10px'}}>Preferred Date</th>
-          <th>Preferred Time</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredRequests
-          ?.filter((task) => !task.alaCarte) // Filter for package services only
-          .map((task) => {
-            const totalOccurrences = task.pending + task.completions;
-            const preferredDatesTimes = task.preferredDatesTimes || [];
-            const interactionLength = task.interactions.length
-          console.log("Interactions Length",interactionLength);
-          
-            
-            // Create rows based on total pending + completions
-            return Array.from({ length: totalOccurrences }).map(
-              (_, index) => {
-                const preferredDateTime = preferredDatesTimes[index] || {}; // Handle missing entries
-                const { preferredDate, preferredTime, completionStatus } =
-                  preferredDateTime || {};
+                <Row className="mt-5">
+                  <Col>
+                    <h5
+                      style={{
+                        fontSize: "16px",
+                        color: "#009efb",
+                        textAlign: "center",
+                      }}
+                    >
+                      Package Services
+                    </h5>
+                    <Table striped bordered hover responsive>
+                      <thead>
+                        <tr className="table-info">
+                          <th>
+                            <Col>
+                              {/* <Form.Label style={{ fontSize: "14px" }}>Select Service Name</Form.Label> */}
+                              <Form.Select
+                                aria-label="Select Service Name"
+                                value={selectedServiceName}
+                                style={{ fontSize: "14px", fontWeight: "bold" }}
+                                onChange={handleServiceNameChange}
+                              >
+                                <option value="" style={{ fontSize: "14px" }}>
+                                  {" "}
+                                  Service Name
+                                </option>
+                                {[
+                                  ...new Set(
+                                    requests?.map((req) => req.serviceName)
+                                  ),
+                                ].map((serviceName, index) => (
+                                  <option key={index} value={serviceName}>
+                                    {serviceName}
+                                  </option>
+                                ))}
+                              </Form.Select>
+                            </Col>
+                          </th>
+                          <th
+                            style={{
+                              alignItems: "center",
+                              alignSelf: "center",
+                              marginBottom: "10px",
+                            }}
+                          >
+                            Preferred Date
+                          </th>
+                          <th>Preferred Time</th>
+                          <th>Status</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredRequests
+                          ?.filter((task) => !task.alaCarte) // Filter for package services only
+                          .map((task) => {
+                            const totalOccurrences =
+                              task.pending + task.completions;
+                            const preferredDatesTimes =
+                              task.preferredDatesTimes || [];
+                            const interactionLength = task.interactions.length;
+                            console.log(
+                              "Interactions Length",
+                              interactionLength
+                            );
 
-                return (
-                  <tr key={`${task.serviceID}-${index}`}>
-                    <td>{task.serviceName}</td>
-                    <td>{preferredDate || ""}</td>
-                    <td>{preferredTime || ""}</td>
-                    <td>{task.completionStatus || "Pending"}</td>
-                    <td>
-                      <Button
-                        variant="primary"
-                        onClick={() =>
-                          handleShowModal(task, preferredDateTime)
-                        } // Pass both task and preferredDateTime to the modal
-                        disabled={completionStatus === "Completed" || interactionLength !=0 }
-                        style={{
-                          backgroundColor: "#009efb",
-                          borderColor: "#009efb",
-                          color: "white",
-                          margin: "4px",
-                          fontSize: "12px",
-                        }}
-                      >
-                        Update
-                      </Button>
-                    </td>
-                  </tr>
-                );
-              }
-            );
-          })}
-      </tbody>
-    </Table>
-  </Col>
-</Row>
+                            // Create rows based on total pending + completions
+                            return Array.from({ length: totalOccurrences }).map(
+                              (_, index) => {
+                                const preferredDateTime =
+                                  preferredDatesTimes[index] || {}; // Handle missing entries
+                                const {
+                                  preferredDate,
+                                  preferredTime,
+                                  completionStatus,
+                                } = preferredDateTime || {};
 
-
+                                return (
+                                  <tr key={`${task.serviceID}-${index}`}>
+                                    <td>{task.serviceName}</td>
+                                    <td>{preferredDate || ""}</td>
+                                    <td>{preferredTime || ""}</td>
+                                    <td>
+                                      {task.completionStatus || "Pending"}
+                                    </td>
+                                    <td>
+                                      <Button
+                                        variant="primary"
+                                        onClick={() =>
+                                          handleShowModal(
+                                            task,
+                                            preferredDateTime
+                                          )
+                                        } // Pass both task and preferredDateTime to the modal
+                                        disabled={
+                                          completionStatus === "Completed" ||
+                                          interactionLength != 0
+                                        }
+                                        style={{
+                                          backgroundColor: "#009efb",
+                                          borderColor: "#009efb",
+                                          color: "white",
+                                          margin: "4px",
+                                          fontSize: "12px",
+                                        }}
+                                      >
+                                        Update
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                );
+                              }
+                            );
+                          })}
+                      </tbody>
+                    </Table>
+                  </Col>
+                </Row>
 
                 {/* Conditionally render the Ala-Carte Services table only if there are pending Ala-Carte services */}
-                {requests?.filter((task) => task.alaCarte && task.frequencyCount > 0)
-                  .length > 0 && (
-                    <Row>
+                {requests?.filter(
+                  (task) => task.alaCarte && task.frequencyCount > 0
+                ).length > 0 && (
+                  <Row>
                     <Col>
                       <h5
                         className="mt-3"
@@ -537,36 +619,50 @@ const totalAlaCarteCompleted = requests
                         </thead>
                         <tbody>
                           {requests
-                            ?.filter((task) => task.alaCarte && task.completionStatus ==="Pending") // Filter Ala-Carte services with pending tasks
+                            ?.filter(
+                              (task) =>
+                                task.alaCarte &&
+                                task.completionStatus === "Pending"
+                            ) // Filter Ala-Carte services with pending tasks
                             .map((task) =>
-                              task.preferredDatesTimes.map((preferredDateTime, index) => (
-                                <tr key={`${task.serviceID}-${index}`}>
-                                  <td>{task.serviceName}</td>
-                                  <td>{preferredDateTime.preferredDate || ""}</td>
-                                  <td>{preferredDateTime.preferredTime || ""}</td>
-                                  <td>
-                                    <Button
-                                      variant="primary"
-                                      onClick={() => handleShowModal(task, preferredDateTime)} // Pass the preferredDate and preferredTime
-                                      style={{
-                                        backgroundColor: "#009efb",
-                                        borderColor: "#009efb",
-                                        color: "white",
-                                        margin: "4px",
-                                        fontSize: "12px",
-                                      }}
-                                    >
-                                      Update
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))
+                              task.preferredDatesTimes.map(
+                                (preferredDateTime, index) => (
+                                  <tr key={`${task.serviceID}-${index}`}>
+                                    <td>{task.serviceName}</td>
+                                    <td>
+                                      {preferredDateTime.preferredDate || ""}
+                                    </td>
+                                    <td>
+                                      {preferredDateTime.preferredTime || ""}
+                                    </td>
+                                    <td>
+                                      <Button
+                                        variant="primary"
+                                        onClick={() =>
+                                          handleShowModal(
+                                            task,
+                                            preferredDateTime
+                                          )
+                                        } // Pass the preferredDate and preferredTime
+                                        style={{
+                                          backgroundColor: "#009efb",
+                                          borderColor: "#009efb",
+                                          color: "white",
+                                          margin: "4px",
+                                          fontSize: "12px",
+                                        }}
+                                      >
+                                        Update
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                )
+                              )
                             )}
                         </tbody>
                       </Table>
                     </Col>
                   </Row>
-                  
                 )}
 
                 {/* Completed Services Table */}
@@ -598,7 +694,7 @@ const totalAlaCarteCompleted = requests
                               <tr key={interaction.interactionID}>
                                 <td>
                                   {interactionIndex === 0 && (
-                                 <div>{task.serviceName}</div>
+                                    <div>{task.serviceName}</div>
                                   )}
                                 </td>
                                 <td>
@@ -608,15 +704,27 @@ const totalAlaCarteCompleted = requests
                                 </td>
                                 <td>{interaction.description}</td>
                                 <td>{interaction.createdDate}</td>
-                                <td>  <Box display="flex" justifyContent="center" alignItems="center">
-                        
-                  {interaction.serviceRating &&[...Array(interaction?.serviceRating)].map((_, index) => (
-                    <StarIcon
-                      key={index}
-                      style={{ color: "green", fontSize: 14 }} // Adjust fontSize as needed
-                    />
-                  ))}
-                </Box></td>
+                                <td>
+                                  {" "}
+                                  <Box
+                                    display="flex"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                  >
+                                    {interaction.serviceRating &&
+                                      [
+                                        ...Array(interaction?.serviceRating),
+                                      ].map((_, index) => (
+                                        <StarIcon
+                                          key={index}
+                                          style={{
+                                            color: "green",
+                                            fontSize: 14,
+                                          }} // Adjust fontSize as needed
+                                        />
+                                      ))}
+                                  </Box>
+                                </td>
                               </tr>
                             )
                           )
@@ -656,6 +764,7 @@ const totalAlaCarteCompleted = requests
                     <Form.Control
                       type="file"
                       name="screenshot"
+                      multiple
                       onChange={handleChange}
                       style={{ fontSize: "14px" }}
                     />
